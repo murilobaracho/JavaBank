@@ -1,4 +1,4 @@
-# 🏦 ETEC Bank
+7# 🏦 ETEC Bank
 
 > **Sistema Bancário com Interface Gráfica (JavaFX) e Gestão de Transações Seguras**
 
@@ -67,7 +67,7 @@ JavaBank (ETEC)/
 
 1. **Clone este repositório:**
    ```bash
-   git clone https://github.com/seu-usuario/etec-bank.git
+   git clone https://github.com/murilobaracho/etec-bank.git
    cd etec-bank/"JavaBank (ETEC)"
    ```
 
@@ -87,5 +87,3 @@ JavaBank (ETEC)/
 javac -cp postgresql-42.7.13.jar -d out Database.java Main.java
 java -cp "out:postgresql-42.7.13.jar" Main
 ```
-
-> ⚠️ Nunca envie o `.env` para o repositório. Ele já está no `.gitignore`.
