@@ -1,0 +1,6 @@
+.env
+**/.env
+out/
+**/out/
+javafx-lib/
+**/javafx-lib/
