@@ -1,53 +1,91 @@
 # 🏦 ETEC Bank
 
-> **Sistema Bancário via Terminal com Gestão de Transações Seguras**
+> **Sistema Bancário com Interface Gráfica (JavaFX) e Gestão de Transações Seguras**
 
 [![Status do Projeto](https://img.shields.io/badge/Status-Concluído-brightgreen.svg)](#)
 [![Linguagem](https://img.shields.io/badge/Linguagem-Java-orange.svg)](#)
-[![Database](https://img.shields.io/badge/Database-SQL-blue.svg)](#)
+[![Interface](https://img.shields.io/badge/UI-JavaFX-blueviolet.svg)](#)
+[![Database](https://img.shields.io/badge/Database-PostgreSQL-blue.svg)](#)
 
 ---
 
 ## 📌 Sobre o Projeto
 
-O **ETEC Bank** é um sistema bancário executado via terminal (CLI) desenvolvido em Java. A aplicação simula operações reais de uma agência através de um menu interativo, conectando-se diretamente a um banco de dados relacional. 
+O **ETEC Bank** é um sistema bancário desenvolvido em Java com interface gráfica em **JavaFX**. A aplicação simula operações de uma agência e se conecta a um banco de dados PostgreSQL via JDBC.
 
-O foco principal do projeto é a manipulação segura de dados, gerenciando clientes, contas, empréstimos e transferências utilizando a API JDBC com controle rigoroso de transações (*Commit* e *Rollback*).
+O foco principal do projeto é a manipulação segura de dados, gerenciando clientes, contas, empréstimos e transferências com controle rigoroso de transações (*Commit* e *Rollback*).
+
+A versão em terminal (`Main.java`) continua disponível junto com a nova interface.
 
 ---
 
 ## ✨ Principais Funcionalidades
 
-- 💰 **Consulta de Saldo e Extrato:** Exibe o histórico completo de movimentações e o saldo atualizado em tempo real.
-- 🔄 **Transações Seguras:** Sistema de transferências, depósitos e saques com verificação de saldo. Utiliza `AutoCommit(false)` para garantir que o dinheiro só saia de uma conta se chegar na outra com sucesso.
-- 📝 **Gestão de Empréstimos:** Cadastro de novas solicitações e listagem de empréstimos com status pendente.
-- 📊 **Métricas Rápidas:** Contabilização instantânea do total de contas ativas no banco de dados.
-- 🔒 **Segurança de Credenciais:** Leitura de variáveis de ambiente via arquivo `.env` para proteger a URL e as credenciais do banco de dados.
+- 📊 **Painel:** total de contas e quantidade de empréstimos pendentes.
+- 💰 **Saldo:** consulta do saldo de qualquer conta, escolhida em uma lista.
+- 🧾 **Extrato:** histórico de movimentações de um cliente em tabela, com conta de destino quando houver.
+- 📝 **Empréstimos:** listagem com filtro por status (pendente, aprovado, quitado) e cadastro de novos empréstimos.
+- 🔄 **Transações Seguras:** depósito, saque, pix e transferência com verificação de saldo. Usa `AutoCommit(false)` para garantir que o dinheiro só saia de uma conta se chegar na outra.
+- 🔒 **Segurança de Credenciais:** a URL do banco é lida de um arquivo `.env`, que não é versionado.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Linguagem:** [Java](https://www.oracle.com/java/)
-- **Banco de Dados:** MySQL / PostgreSQL *(Conexão nativa via JDBC)*
-- **Bibliotecas/Classes Nativas:**
+- **Linguagem:** Java
+- **Interface:** JavaFX (`javafx.controls`)
+- **Banco de Dados:** PostgreSQL (driver `postgresql-42.7.13.jar` incluso)
+- **Classes Nativas:**
   - `java.sql.*` (Connection, PreparedStatement, ResultSet)
-  - `java.util.Properties` (Leitura do arquivo `.env`)
-  - `java.time.LocalDateTime` (Registro de data e hora das transações)
-  - `java.util.Scanner` (Interface interativa no terminal)
+  - `java.math.BigDecimal` (valores monetários)
+  - `java.util.Properties` (leitura do arquivo `.env`)
+
+---
+
+## 📁 Estrutura
+
+```
+JavaBank (ETEC)/
+├── App.java        # Interface JavaFX
+├── Database.java   # Acesso ao banco (JDBC)
+├── Main.java       # Versão em terminal
+├── run.sh          # Compila e executa a interface
+├── javafx-lib/     # Jars do JavaFX (não versionado)
+└── .env            # Credenciais do banco (não versionado)
+```
 
 ---
 
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
-- [JDK (Java Development Kit)](https://www.oracle.com/java/technologies/downloads/) instalado.
-- Servidor de banco de dados rodando (MySQL, PostgreSQL, etc).
-- Driver JDBC correspondente ao seu banco de dados.
+- [JDK](https://www.oracle.com/java/technologies/downloads/) 21 ou superior.
+- Um banco PostgreSQL com as tabelas `agencia`, `cliente`, `conta`, `transacao` e `emprestimo` (veja o diagrama em `diagrama-db.png`).
+- JavaFX: os jars `javafx-base`, `javafx-graphics` e `javafx-controls` (versão Linux) dentro de `JavaBank (ETEC)/javafx-lib/`, baixados em [Maven Central](https://repo1.maven.org/maven2/org/openjfx/). Como alternativa, defina `JAVAFX_HOME` com o caminho da pasta `lib` de um SDK do JavaFX.
 
 ### Passo a Passo
 
 1. **Clone este repositório:**
    ```bash
-   git clone [https://github.com/seu-usuario/etec-bank.git](https://github.com/seu-usuario/etec-bank.git)
-   cd etec-bank
+   git clone https://github.com/seu-usuario/etec-bank.git
+   cd etec-bank/"JavaBank (ETEC)"
+   ```
+
+2. **Crie o arquivo `.env`** na pasta `JavaBank (ETEC)`:
+   ```
+   DATABASE_URL=jdbc:postgresql://HOST/BANCO?user=USUARIO&password=SENHA&sslmode=require
+   ```
+
+3. **Execute a interface gráfica:**
+   ```bash
+   ./run.sh
+   ```
+
+### Versão em terminal
+
+```bash
+javac -cp postgresql-42.7.13.jar -d out Database.java Main.java
+java -cp "out:postgresql-42.7.13.jar" Main
+```
+
+> ⚠️ Nunca envie o `.env` para o repositório. Ele já está no `.gitignore`.
